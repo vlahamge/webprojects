@@ -7,7 +7,7 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser());
-const port = 3004
+const port = process.env.port|| 3004
 var fs = require('fs')
 
 var currentSearchResult = 'example'
