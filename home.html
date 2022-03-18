@@ -1,0 +1,65 @@
+<html>
+<title></title>
+<head> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"></head>
+<body>
+    <ul id="displaytask">
+
+    </ul> 
+    <input type="text" name="taskname" id="taskname">
+    <button onclick="addTask()">Add</button>
+    <script>
+        function loadtask()
+        {
+           
+            fetch("http://localhost:3004/loadtask")
+            .then(res=>res.json())
+                .then(data=>{
+                    document.getElementById('displaytask').innerHTML='';
+                   console.log(data);
+                   data.forEach(function(task,i){
+                    var newli=document.createElement('li');
+                    newli.innerHTML=task;
+                    var delBtn = document.createElement("button");
+                        delBtn.innerHTML = 'delete';
+                        delBtn.onclick = function(){
+                            deleteTask(i)
+                        }
+                        newli.appendChild(delBtn);
+                        var editBtn = document.createElement('button');
+                        editBtn.innerHTML = 'edit';
+                        editBtn.onclick=function(){
+                            editTask(i,task)
+                        }
+                        newli.appendChild(editBtn)
+                    document.getElementById('displaytask').appendChild(newli);
+
+
+                    });
+                });
+        }
+        loadtask();
+       
+        function addTask()
+        {
+            var taskname= document.getElementById('taskname').value;
+            fetch("http://localhost:3004/addTask",
+            {
+                method:'POST',
+                headers:{
+                    'content-Type':'application/Json'
+                },
+                body:JSON.stringify({task:taskname})
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                if(data.message==="SUCCESS")
+                {
+                    alert('data addreds successfully');
+                    loadtask();
+                }
+            })
+
+        }
+    </script>
+</body>
+</html>
